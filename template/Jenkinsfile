@@ -1,0 +1,13 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build & Deploy') {
+            environment {
+                TARGET = "${WWW_ROOT_DIR}/${env.JOB_NAME}"
+            }
+            steps {
+                sh "mkdir -p ${TARGET} && rm -r ${TARGET} && cp -r dist/ ${TARGET}"
+            }
+        }
+    }
+}
