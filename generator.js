@@ -3,22 +3,22 @@ module.exports = (api, options, rootOptions) => {
   api.extendPackage({
     dependencies: {
       "axios": "^0.19.0",
-      "core-js": "^2.6.5",
-      "vue-router": "^3.0.3"
+      // "core-js": "^2.6.5",
+      // "vue-router": "^3.0.3"
     },
     devDependencies: {
-      "@vue/cli-plugin-babel": "~4.3.0",
-      "@vue/cli-plugin-eslint": "~4.3.0",
-      "@vue/cli-plugin-router": "~4.3.0",
-      "@vue/eslint-config-prettier": "^6.0.0",
-      "babel-eslint": "^10.1.0",
-      "eslint": "^6.7.2",
-      "eslint-plugin-prettier": "^3.1.1",
-      "eslint-plugin-vue": "^6.2.2",
-      "less": "^3.0.4",
-      "less-loader": "^5.0.0",
-      "prettier": "^1.19.1",
-      "vue-template-compiler": "^2.6.11",
+      // "@vue/cli-plugin-babel": "~4.3.0",
+      // "@vue/cli-plugin-eslint": "~4.3.0",
+      // "@vue/cli-plugin-router": "~4.3.0",
+      // "@vue/eslint-config-prettier": "^6.0.0",
+      // "babel-eslint": "^10.1.0",
+      // "eslint": "^6.7.2",
+      // "eslint-plugin-prettier": "^3.1.1",
+      // "eslint-plugin-vue": "^6.2.2",
+      // "less": "^3.0.4",
+      // "less-loader": "^5.0.0",
+      // "prettier": "^1.19.1",
+      // "vue-template-compiler": "^2.6.11",
       "postcss-px-to-viewport": "^1.1.1"
     }
   });
@@ -30,7 +30,6 @@ module.exports = (api, options, rootOptions) => {
         howler: "^2.1.2"
       }
     });
-
   }
 
   // 公共基础目录和文件

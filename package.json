@@ -1,0 +1,19 @@
+{
+  "name": "itv-vue-h5",
+  "version": "1.1.0",
+  "description": "vue-cli 3.0 提供了 preset 入口，让我们能够自定义项目内容。<br/> 比如：添加安装需要的npm包、自定义的文件、修改App.vue等。",
+  "main": "generator.js",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/youyou12344/vue-h5.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/youyou12344/vue-h5/issues"
+  },
+  "homepage": "https://github.com/youyou12344/vue-h5#readme"
+}
