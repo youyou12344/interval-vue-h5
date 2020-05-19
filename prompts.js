@@ -9,6 +9,6 @@ module.exports = [
     name: "wx_user",
     type: "confirm",
     message: `是否需要获取微信用户信息`,
-    default: false
+    default: true
   }
 ];
