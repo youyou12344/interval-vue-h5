@@ -33,7 +33,7 @@ export default {
   },
 
   // 初始化微信配置
-  initToken(params = {}) {
+  initToken(params = {}, cb) {
     return new Promise((resolve, reject) => {
       if (window.entryUrl === undefined || window.entryUrl === "") {
         window.entryUrl = location.href.split("#")[0];
@@ -46,6 +46,17 @@ export default {
         .then(res => {
           let data = res.data;
           if (data.code === 0) {
+
+            // 不是微信浏览器，立即执行播放背景音乐的回调函数（要等用户第一次交互后才会播放）
+            var userAgent = window.navigator.userAgent.toLowerCase();
+            var is_weixin_browser = /micromessenger/.test(userAgent);
+            if (!is_weixin_browser) {
+              if (typeof cb === "function") {
+                cb();
+              }
+            }
+
+
             // eslint-disable-next-line no-undef
             wx.config({
               debug: false,
@@ -61,6 +72,10 @@ export default {
             });
             // eslint-disable-next-line no-undef
             wx.ready(() => {
+              // 是微信浏览器，在ready后自动播放背景音乐
+              if (typeof cb === "function") {
+                cb();
+              }
               this.initShare(params)
                 .then(res => {
                   resolve(res);
@@ -78,28 +93,28 @@ export default {
   },
 
   // 获取url的参数
-  getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    // eslint-disable-next-line
-    name = name.replace(/[\[\]]/g, '\\$&')
-    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
-    let results = regex.exec(url);
-    if (!results) return "";
-    if (!results[2]) return "";
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  },
+  // getParameterByName(name, url) {
+  //   if (!url) url = window.location.href;
+  //   // eslint-disable-next-line
+  //   name = name.replace(/[\[\]]/g, '\\$&')
+  //   let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+  //   let results = regex.exec(url);
+  //   if (!results) return "";
+  //   if (!results[2]) return "";
+  //   return decodeURIComponent(results[2].replace(/\+/g, " "));
+  // },
 
-  // 屏幕的长宽比例
-  initSizeClass() {
-    let ratio = window.innerHeight / window.innerWidth;
-    let res;
-    if (ratio < 1.58) {
-      res = "ipad"; // TAG： 小一点的安卓手机
-    } else if (ratio > 1.8) {
-      res = "iphonex"; // TAG: 长
-    } else {
-      res = "iphone"; // TAG: 正常的手机
-    }
-    Vue.prototype.$bus.sizeClass = res;
-  }
+  // 屏幕的长宽比例（可能没有啥用）
+  // initSizeClass() {
+  //   let ratio = window.innerHeight / window.innerWidth;
+  //   let res;
+  //   if (ratio < 1.58) {
+  //     res = "pad";
+  //   } else if (ratio > 1.8) {
+  //     res = "phonex";
+  //   } else {
+  //     res = "phone";
+  //   }
+  //   Vue.prototype.$bus.sizeClass = res;
+  // }
 };
