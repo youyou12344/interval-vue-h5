@@ -69,50 +69,9 @@ export default {
 
 <style scoped lang="less">
 @import "../style/a.less";
+
 .Index {
-  // 开始按钮
-  .btn__wrap {
-    width: 424px;
-    position: absolute;
-    left: 50%;
-    top: 20px;
-    transform: translateX(-50%);
-    bottom: 10vh;
-
-    .btn-start {
-      width: 424px;
-      height: 60px;
-      background: pink;
-      &.active {
-        animation: scaleBtn 1600ms ease-in-out infinite 300ms;
-      }
-    }
-
-    .text__wrap {
-      height: 70px;
-      font-size: 26px;
-      display: flex;
-      align-items: center;
-      background: #fe7;
-      width: 40vw;
-      position: absolute;
-      left: 50%;
-      top: 16px;
-      transform: translateX(-50%);
-      opacity: 1;
-      transition: opacity ease-in-out 600ms;
-      .text--num {
-        width: 34%;
-        text-align: right;
-      }
-      .text--loading {
-        widows: 66%;
-      }
-
-      &.notactive {
-        opacity: 0;
-      }
-    }
-  }
+  width: 100%;
+  height: 100%;
 }
 </style>

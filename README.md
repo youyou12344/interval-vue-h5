@@ -1,3 +1,4 @@
+<!-- TODO 还差一个public的index.html -->
 ## 这是一个什么项目？
 
 vue-cli 3.0 提供了 preset 入口，让我们能够自定义项目内容。<br/>

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <%_ if (options.bgm) { _%>
     <!-- 音乐按钮 -->
     <transition name="fade">
       <img
@@ -11,6 +12,7 @@
       />
     </transition>
 
+    <%_ } _%>
     <!-- 显示的内容 -->
     <router-view />
 
@@ -24,31 +26,29 @@
 
 <script>
 import ItvToast from "./components/Toast";
+<%_ if (options.bgm) { _%>
+import mixins_bgm from "./mixins/bgm";
+<%_ } _%>
 
 export default {
   name: "app",
+  mixins: [
+    //
+    <%_ if (options.bgm) { _%>
+    mixins_bgm
+    <%_ } _%>
+  ],
   components: { ItvToast },
   data() {
     return {
-      isPlaying: false, // 是否播放背景音乐
-      bgm: null, // 背景音乐
-      musicBtn: [
-        require("./assets/images/music-off.png"),
-        require("./assets/images/music-on.png")
-      ] // 音乐的按钮
+      //
     };
   },
 
-  computed: {
-    musicSrc() {
-      return this.musicBtn[this.isPlaying ? 1 : 0];
-    }
-  },
+  computed: {},
 
   created() {
     this.$utils.initSizeClass()
-    this.bgm = new Audio(require("./assets/bgm.mp3"));
-    this.bgm.loop = true;
   },
 
   mounted() {
@@ -73,8 +73,10 @@ export default {
   methods: {
     // 初始化页面
     initPage() {
-      this.bgm.play();
-      this.isPlaying = true;
+      //
+      <%_ if (options.bgm) { _%>
+      this.initBgm();
+      <%_ } _%>
     },
 
     <%_ if (options.wx_user) { _%>
@@ -96,18 +98,6 @@ export default {
       }
     },
     <%_ } _%>
-
-    // 播放背景音乐
-    switchMusic(isPlaying) {
-      if (isPlaying) {
-        this.bgm && this.bgm.play();
-        console.log("paly");
-      } else {
-        this.bgm && this.bgm.pause();
-        console.log("pause");
-      }
-      this.isPlaying = isPlaying;
-    }
   }
 };
 </script>
@@ -117,12 +107,15 @@ img[src=""],
 img:not([src]) {
   opacity: 0;
 }
+<%_ if (options.bgm) { _%>
+
 .btn-music {
   width: 61px;
   position: absolute;
   top: 20px;
   right: 24px;
 }
+<%_ } _%>
 
 * {
   padding: 0;
@@ -136,6 +129,10 @@ body {
   width: 100vw;
   height: 100vh;
   // overflow: hidden;
+  #app {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .pa100 {

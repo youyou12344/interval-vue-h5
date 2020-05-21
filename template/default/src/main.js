@@ -1,9 +1,11 @@
 import Vue from "vue";
 import App from "./App.vue";
-import router from "./router";
+import router from "./router/index.js";
 import bus from "./bus";
 import api from "./api";
 import utils from "./utils";
+
+import "./style/a.less";
 
 Vue.config.productionTip = false;
 

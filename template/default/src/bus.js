@@ -10,8 +10,13 @@ export default new Vue({
         sex: null,
         name: null
       },
-      <%_ } _%>
 
+      <%_ } _%>
+      <%_ if (options.bgm) { _%>
+      // 是否显示音乐按钮，有的页面不需要显示
+      showMusicBtn: true,
+
+      <%_ } _%>
       // 屏幕的长宽比例
       sizeClass: "",
 
@@ -20,16 +25,16 @@ export default new Vue({
         show: false,
         content: ""
       },
-
-      // 是否显示音乐按钮，有的页面不需要显示
-      showMusicBtn: true
     };
   },
+
   created() {
+    //
     <%_ if (options.wx_user) { _%>
     this.getSaveUserInfo()
     <%_ } _%>
   },
+
   methods: {
     <%_ if (options.wx_user) { _%>
     // 获取保存用户信息
@@ -40,8 +45,8 @@ export default new Vue({
       this.user.textarea = user.textarea;
       this.user.name = user.name;
     },
-    <%_ } _%>
 
+    <%_ } _%>
     // 弹出提示
     _toast(params = { show: true, content: "提示" } || "") {
       this.toast = {
