@@ -19,4 +19,7 @@ vue create --preset youyou12344/vue-h5 test2
 
 ## 我是如何开发的？
 
-具体看博客。
+### 文件解释
+template 模版文件
+- default 是默认一定需要的
+- handler 是可选的/需要手动处理的（比如文件名）
