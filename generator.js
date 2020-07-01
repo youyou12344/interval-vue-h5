@@ -21,7 +21,7 @@ module.exports = (api, options, rootOptions) => {
   api.render('./template/default');
 
   // 加入 bgm 相关文件
-  api.render({
+  options.mode === 0 && api.render({
     './src/components/Bgm.vue': './template/handler/components/Bgm.vue',
     './src/mixins/bgm.js': './template/handler/mixins/bgm.js',
     './src/assets/images/music-on.png': './template/handler/assets/images/music-on.png',

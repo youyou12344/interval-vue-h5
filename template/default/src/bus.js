@@ -1,8 +1,12 @@
 import Vue from "vue";
+<%_ if (options.mode === 0) { _%>
 import BgmMixins from './mixins/bgm.js';
+<%_ } _%>
 
 export default new Vue({
+  <%_ if (options.mode === 0) { _%>
   mixins: [BgmMixins],
+  <%_ } _%>
   data() {
     return {
       // 当前显示的页面
@@ -19,8 +23,7 @@ export default new Vue({
     };
   },
 
-  created() {
-  },
+  created() {},
 
   methods: {
     // 弹出提示

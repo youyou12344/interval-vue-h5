@@ -1,7 +1,9 @@
 <template>
   <div id="app">
+    <%_ if (options.mode === 0) { _%>
     <!-- 音乐按钮 -->
     <itv-bgm />
+    <%_ } _%>
 
     <!-- 显示的内容 -->
     <router-view />
@@ -16,18 +18,21 @@
 
 <script>
 import ItvToast from "./components/Toast";
+<%_ if (options.mode === 0) { _%>
 import ItvBgm from "./components/Bgm";
+<%_ } _%>
 
 export default {
   name: "app",
   mixins: [],
   components: { 
+    <%_ if (options.mode === 0) { _%>
     ItvBgm,
+    <%_ } _%>
     ItvToast
   },
   data() {
-    return {
-    };
+    return {};
   },
 
   computed: {},
@@ -40,13 +45,19 @@ export default {
     this.$nextTick(async () => {
       try {
         this.initPage();
+        // 设置微信分享的卡片信息
         await this.$utils.initToken({
           title: "wx分享的标题",
           desc: "wx分享的描述",
           img:
             "https://static.interval.im/platinum_inventory/R8kYSCmEzpBBz5rJ.jpeg",
           link: "http://wxc8f356adb367c7b6.wx.interval.im/cmbc/"
-        }, this.$bus.palyBgmMusic);
+        }, () => {
+          <%_ if (options.mode === 0) { _%>
+          this.$bus.palyBgmMusic()
+          <%_ } _%>
+          // 微信环境的回调
+        });
       } catch (e) {
         console.error(e);
       }
@@ -55,7 +66,9 @@ export default {
   methods: {
     // 初始化页面
     initPage() {
+      <%_ if (options.mode === 0) { _%>
       this.$bus.audio_bgm = new Audio(require("./assets/bgm.mp3"));
+      <%_ } _%>
     }
   }
 };
