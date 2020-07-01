@@ -1,22 +1,7 @@
 <template>
   <div id="app">
     <!-- 音乐按钮 -->
-    <transition name="fade">
-      <div class="btn-music">
-        <img
-          src="./assets/images/music-off.png"
-          alt="静音"
-          v-show="!$bus.isPlayingBgm"
-          @click="$bus.swichBgm('play')"
-        />
-        <img
-          src="./assets/images/music-on.png"
-          alt="播放"
-          v-show="$bus.isPlayingBgm"
-          @click="$bus.swichBgm('stop')"
-        />
-      </div>
-    </transition>
+    <itv-bgm />
 
     <!-- 显示的内容 -->
     <router-view />
@@ -31,11 +16,15 @@
 
 <script>
 import ItvToast from "./components/Toast";
+import ItvBgm from "./components/Bgm";
 
 export default {
   name: "app",
   mixins: [],
-  components: { ItvToast },
+  components: { 
+    ItvBgm,
+    ItvToast
+  },
   data() {
     return {
     };
@@ -57,7 +46,7 @@ export default {
           img:
             "https://static.interval.im/platinum_inventory/R8kYSCmEzpBBz5rJ.jpeg",
           link: "http://wxc8f356adb367c7b6.wx.interval.im/cmbc/"
-        }, this.$bus.palyMusic);
+        }, this.$bus.palyBgmMusic);
       } catch (e) {
         console.error(e);
       }

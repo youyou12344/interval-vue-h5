@@ -3,6 +3,7 @@ module.exports = (api, options, rootOptions) => {
   api.extendPackage({
     dependencies: {
       "axios": "^0.19.0",
+      "howler": "^2.2.0",
       // "core-js": "^2.6.5",
       "vue-router": "^3.0.3"
     },
@@ -21,6 +22,8 @@ module.exports = (api, options, rootOptions) => {
 
   // 加入 bgm 相关文件
   api.render({
+    './src/components/Bgm.vue': './template/handler/components/Bgm.vue',
+    './src/mixins/bgm.js': './template/handler/mixins/bgm.js',
     './src/assets/images/music-on.png': './template/handler/assets/images/music-on.png',
     './src/assets/images/music-off.png': './template/handler/assets/images/music-off.png',
     './src/assets/bgm.mp3': './template/handler/assets/bgm.mp3',

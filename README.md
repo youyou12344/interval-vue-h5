@@ -1,4 +1,3 @@
-<!-- TODO 还差一个public的index.html -->
 ## 这是一个什么项目？
 
 vue-cli 3.0 提供了 preset 入口，让我们能够自定义项目内容。<br/>
@@ -23,3 +22,7 @@ vue create --preset youyou12344/vue-h5 test2
 template 模版文件
 - default 是默认一定需要的
 - handler 是可选的/需要手动处理的（比如文件名）
+
+
+### 注意事项：
+- 微信 JS-SDK 的 JS 文件之后可能要更新哦，如果要使用新的功能。

@@ -47,7 +47,7 @@ export default {
           let data = res.data;
           if (data.code === 0) {
 
-            // 不是微信浏览器，立即执行播放背景音乐的回调函数（要等用户第一次交互后才会播放）
+            // 不是微信浏览器，立即执行回调函数（比如：播放背景音乐、但要等用户第一次交互后才会播放）
             var userAgent = window.navigator.userAgent.toLowerCase();
             var is_weixin_browser = /micromessenger/.test(userAgent);
             if (!is_weixin_browser) {
@@ -72,7 +72,7 @@ export default {
             });
             // eslint-disable-next-line no-undef
             wx.ready(() => {
-              // 是微信浏览器，在ready后自动播放背景音乐
+              // 是微信浏览器，在ready后立即执行回调函数（比如：自动播放背景音乐）
               if (typeof cb === "function") {
                 cb();
               }

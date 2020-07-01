@@ -1,40 +1,47 @@
+import { Howl } from "howler";
+
 export default {
   data() {
     return {
-      isPlaying: false, // 是否播放背景音乐
-      bgm: null, // 背景音乐
-      musicBtn: [
-        require("../assets/images/music-off.png"),
-        require("../assets/images/music-on.png")
-      ] // 音乐的按钮
+      audio_btn: null, // 按钮的点击音效
+      audio_bgm: null, // 背景音乐
+      isPlayingBgm: false // 正在播放背景音乐
     };
   },
 
-  computed: {
-    musicSrc() {
-      return this.musicBtn[this.isPlaying ? 1 : 0];
+  computed: {},
+
+  created() {},
+
+  methods: {
+    // 初始化按钮的点击音效
+    initBgmMusic() {
+      this.audio_bgm = new Howl({
+        src: require("../assets/bgm.mp3")
+      });
+    },
+
+    // 播放音乐（用在一开始）
+    palyBgmMusic() {
+      if (this.audio_bgm) {
+        this.audio_bgm.play();
+        this.audio_bgm.volume = 0.5;
+        this.audio_bgm.loop = true;
+        this.isPlayingBgm = true;
+      }
+    },
+
+    // 切换背景音乐是否播放
+    swichBgm(type) {
+      if (type === "stop" && this.isPlayingBgm) {
+        this.audio_bgm.pause();
+        this.isPlayingBgm = false;
+        // console.log("停止", this.bgmClose);
+      } else if (type === "play" && !this.isPlayingBgm) {
+        this.audio_bgm.play();
+        this.isPlayingBgm = true;
+        // console.log("播放", this.bgmClose);
+      }
     }
-  },
-
-  created() {
-    this.bgm = new Audio(require("../assets/bgm.mp3"));
-    this.bgm.loop = true;
-  },
-
-  initBgm() {
-    this.bgm.play();
-    this.isPlaying = true;
-  },
-
-  // 播放背景音乐
-  switchMusic(isPlaying) {
-    if (isPlaying) {
-      this.bgm && this.bgm.play();
-      console.log("paly");
-    } else {
-      this.bgm && this.bgm.pause();
-      console.log("pause");
-    }
-    this.isPlaying = isPlaying;
   }
 };

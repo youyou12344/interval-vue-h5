@@ -25,55 +25,59 @@ export default {
   computed: {},
   created() {},
   mounted() {
-    this.prepreload();
+    this.preloadFirstPage();
   },
-  watch: {
-    // 预加载完成后，进入开始页面
-    percent(v) {
-      if (v >= 100 && this.$bus.showPage === "loading") {
-        setTimeout(() => {
-          this.$bus.showPage = "start";
-        }, 300);
-      }
-    }
-  },
+  watch: {},
   methods: {
-    // 预加载loading页面需要的信息
-    prepreload() {
+    // 预加载.第一个页面需要的图片
+    preloadFirstPage() {
+      // 标示下面的超时定时器是否执行了
       let doTimer = false;
-      const timer = setTimeout(() => {
+
+      // 若超过2s后，第一个页面需要的图片还没有加载好，则跳过，进入加载全部页面需要的图片的逻辑
+      this.timerPreloadFirstPage = setTimeout(() => {
+        console.warn("1、预加载.第一个页面需要的图片.超时");
         doTimer = true;
-        this.preload();
-        this.$bus.initMusic();
+        this.afterPreloadFirstPage();
       }, 2000);
-      const imgs = [ "logo.png"];
-      let loaded = 0;
-      imgs.forEach(src => {
+
+      // 第一个页面需要的图片
+      const images = ["logo.png"];
+
+      // 预加载图片
+      let loaded = 0; // 当前已经加载的图片数
+      images.forEach(src => {
         let image = new Image();
         image.onload = () => {
           loaded += 1;
-          if (loaded === imgs.length) {
-            !doTimer && this.preload();
-            !doTimer && this.$bus.initMusic();
-            clearTimeout(timer);
+          if (loaded === images.length && !doTimer) {
+            console.log("1、预加载.第一个页面需要的图片.完成");
+            clearTimeout(this.timerPreloadFirstPage);
+            this.afterPreloadFirstPage();
           }
         };
         image.src = require(`../assets/images/${src}`);
       });
     },
 
-    // 预加载图片
-    preload() {
+    // 首页图片预加载后
+    afterPreloadFirstPage() {
+      this.preloadOtherPages();
+    },
+
+    // 预加载.非首页的其他图片
+    preloadOtherPages() {
       this.showPage = true;
-      /* 获取所有的图片 */
-      const req = require.context("../assets/images/", true, /\.png$/);
-      let loaded = 0;
-      let images = req.keys().map(item =>
+      // 获取所有图片
+      // eslint-disable-next-line prettier/prettier
+      const req = require.context("../assets/images/", true, /\.png|gif|jpeg|jpg$/);
+      const images = req.keys().map(item =>
         // eslint-disable-next-line prettier/prettier
         item.split("").splice(2).join("")
       );
 
-      /* 预加载图片 */
+      // 预加载图片
+      let loaded = 0; // 当前已经加载的图片数
       images.forEach(src => {
         let image = new Image();
         image.onload = () => {
@@ -83,25 +87,46 @@ export default {
         image.src = require(`../assets/images/${src}`);
       });
 
-      /* loading设置 */
-      let startTime = Date.now();
-      let intervalId = setInterval(() => {
-        if (this.percent >= 100) {
-          const costTime = Date.now() - startTime;
-          const c1 = loaded >= images.length; // 预加载完成
-          const c2 = costTime > 2000; // 兼容预加载超时(超过2s)
-          if (c1 || c2) {
-            c1 && console.log("加载时长：", costTime);
-            c2 && console.warn("预加载超时");
-            clearInterval(intervalId);
-            return;
-          }
+      // 进度条前进的时间间隔，取值范围为[40ms, 80ms]，即总时长范围为[1s, 2s]
+      const interval = Math.max(Math.min((images.length * 15) / 25, 80), 40);
+      // 标示下面的超时定时器是否执行了
+      let doTimer = false;
+      // 若超过2s后，其他页面需要的图片还没有加载好，则跳过，进入h5逻辑
+      this.timerPreloadOtherPages = setTimeout(() => {
+        console.warn("2、预加载.非首页的其他图片.超时");
+        doTimer = true;
+        clearInterval(this.intervalId);
+        this.afterPreloadOtherPages();
+      }, 2000);
+      this.intervalId = setInterval(() => {
+        // 进度条大于100，且图片加载好了，且定时器没有触发
+        if (this.percent >= 100 && loaded >= images.length && !doTimer) {
+          console.log("2、预加载.非首页的其他图片.完成");
+          clearTimeout(this.timerPreloadOtherPages);
+          clearInterval(this.intervalId);
+          this.afterPreloadOtherPages();
         }
         if (this.percent < 100) {
           this.percent += 4;
         }
-      }, 60); //（24 * 60 = ）1140ms 可以加载大概100张图片
+      }, interval); // 加载一张图片大概需要 10ms
+    },
+
+    // 非首页的其他图片预加载后
+    afterPreloadOtherPages() {
+      console.log("3、开始h5");
+      if (this.$bus.showPage === "loading") {
+        setTimeout(() => {
+          this.$bus.showPage = "start";
+        }, 300);
+      }
     }
+  },
+
+  destroyed() {
+    this.intervalId && clearInterval(this.intervalId);
+    this.timerPreloadFirstPage && clearTimeout(this.timerPreloadFirstPage);
+    this.timerPreloadOtherPages && clearTimeout(this.timerPreloadOtherPages);
   }
 };
 </script>
