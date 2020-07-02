@@ -126,7 +126,7 @@ body {
     height: 100vh;
     max-height: 100vh;
     overflow-y: auto;
-    padding: 5vh 0;
+    padding: 0;
     box-sizing: border-box;
   }
 }

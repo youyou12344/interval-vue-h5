@@ -1,7 +1,7 @@
 /* 进度条 */
 <template>
   <div class="Loading page__wrap">
-    <div class="page__cnt" v-show="showPage">
+    <div class="page__cnt" v-show="showLoading">
       <div class="wrap--precent">
         <div class="progress" :style="{ width: `${percent}%` }"></div>
         <div>{{ percent }} %</div>
@@ -19,7 +19,7 @@ export default {
   data() {
     return {
       percent: 0,
-      showPage: false
+      showLoading: false // 展示进度条视图
     };
   },
   computed: {},
@@ -67,7 +67,7 @@ export default {
 
     // 预加载.非首页的其他图片
     preloadOtherPages() {
-      this.showPage = true;
+      this.showLoading = true;
       // 获取所有图片
       // eslint-disable-next-line prettier/prettier
       const req = require.context("../assets/images/", true, /\.png|gif|jpeg|jpg$/);

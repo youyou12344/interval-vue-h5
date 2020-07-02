@@ -1,12 +1,14 @@
 module.exports = (api, options, rootOptions) => {
+  // 需要安装的依赖
+  let dependencies = {
+      "axios": "^0.19.0",
+      "vue-router": "^3.0.3"
+  }
+  options.mode === 0 && (dependencies["howler"] = "^2.2.0")
+
   // 安装一些基础公共库
   api.extendPackage({
-    dependencies: {
-      "axios": "^0.19.0",
-      "howler": "^2.2.0",
-      // "core-js": "^2.6.5",
-      "vue-router": "^3.0.3"
-    },
+    dependencies,
     devDependencies: {
       "style-resources-loader": "^1.3.3",
       "postcss-px-to-viewport": "^1.1.1"
