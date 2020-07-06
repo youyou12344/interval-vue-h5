@@ -6,6 +6,9 @@ vue-cli 3.0 提供了 preset 入口，让我们能够自定义项目内容。<br
 ## 如何使用本项目
 
 在你的本地运行下面的命令就可以了。
+
+**记得更新 vue/cli的版本**，才可以重写readme.md
+
 ``` shell
 vue create --preset youyou12344/vue-h5 test2
 ```

@@ -36,4 +36,22 @@ module.exports = (api, options, rootOptions) => {
     './.eslintrc.js': './template/handler/_eslintrc.js',
     './.gitignore': './template/handler/_gitignore'
   })
+
+  api.onCreateComplete(() => {
+    const fs = require('fs')
+    const path = require('path')
+    const path1 = api.resolve("./README.md");
+    const path2 = api.resolve("./src/components/HelloWorld.vue");
+
+    // 删除 HelloWorld.vue
+    fs.unlink(path2, (err) => {
+      if (err) throw err;
+    })
+
+    // 重写 README.md
+    fs.readFile(path.resolve(__dirname, './template/handler/README.md'), (err, data) => {
+      if (err) throw err;
+      fs.writeFileSync(path1, data)
+    })
+  })
 }
