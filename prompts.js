@@ -21,7 +21,8 @@ module.exports = [
     message: '请选择需要的工具库',
     choices: [
       new inquirer.Separator(' --- 样式工具 🎨 --- '),
-      {name: 'vant'}
+      {name: 'vant'},
+      {name: 'vconsole'},
     ],
     default: 0
   }

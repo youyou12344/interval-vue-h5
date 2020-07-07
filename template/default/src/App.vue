@@ -79,6 +79,7 @@ img[src=""],
 img:not([src]) {
   opacity: 0;
 }
+<%_ if (options.mode === 0) { _%>
 
 .btn-music {
   width: 61px;
@@ -91,6 +92,7 @@ img:not([src]) {
     height: 100%;
   }
 }
+<%_ } _%>
 
 * {
   padding: 0;
@@ -108,11 +110,6 @@ body {
     width: 100%;
     height: 100%;
   }
-}
-
-.pa100 {
-  position: absolute;
-  width: 100%;
 }
 
 .page__wrap {

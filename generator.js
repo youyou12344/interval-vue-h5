@@ -1,6 +1,8 @@
 module.exports = (api, options, rootOptions) => {
   // 需要 vant 库
   const tool_vant = options.toolNeed.includes('vant');
+  // 需要 vconsole 库
+  const tool_vconsole = options.toolNeed.includes('vconsole');
   
   // 需要安装的依赖
   let dependencies = {
@@ -15,7 +17,8 @@ module.exports = (api, options, rootOptions) => {
     "style-resources-loader": "^1.3.3",
     "postcss-px-to-viewport": "^1.1.1"
   }
-  tool_vant && (dependencies["babel-plugin-import"] = "^1.13.0")
+  tool_vant && (devDependencies["babel-plugin-import"] = "^1.13.0")
+  tool_vconsole && (devDependencies["vconsole"] = "^3.3.4")
 
   // 安装一些基础公共库
   api.extendPackage({

@@ -36,13 +36,13 @@ export default {
 
       // 若超过2s后，第一个页面需要的图片还没有加载好，则跳过，进入加载全部页面需要的图片的逻辑
       this.timerPreloadFirstPage = setTimeout(() => {
-        console.warn("1、预加载.第一个页面需要的图片.超时");
+        // console.log("1、预加载.第一个页面需要的图片.超时");
         doTimer = true;
         this.afterPreloadFirstPage();
-      }, 2000);
+      }, 2000); // 备注： 如果loading 页面没有什么图片素材要加载，这个 2000 值可以修改小一点
 
       // 第一个页面需要的图片
-      const images = ["logo.png"];
+      const images = [];
 
       // 预加载图片
       let loaded = 0; // 当前已经加载的图片数
@@ -51,7 +51,7 @@ export default {
         image.onload = () => {
           loaded += 1;
           if (loaded === images.length && !doTimer) {
-            console.log("1、预加载.第一个页面需要的图片.完成");
+            // console.log("1、预加载.第一个页面需要的图片.完成");
             clearTimeout(this.timerPreloadFirstPage);
             this.afterPreloadFirstPage();
           }
@@ -93,7 +93,7 @@ export default {
       let doTimer = false;
       // 若超过2s后，其他页面需要的图片还没有加载好，则跳过，进入h5逻辑
       this.timerPreloadOtherPages = setTimeout(() => {
-        console.warn("2、预加载.非首页的其他图片.超时");
+        // console.log("2、预加载.非首页的其他图片.超时");
         doTimer = true;
         clearInterval(this.intervalId);
         this.afterPreloadOtherPages();
@@ -101,7 +101,7 @@ export default {
       this.intervalId = setInterval(() => {
         // 进度条大于100，且图片加载好了，且定时器没有触发
         if (this.percent >= 100 && loaded >= images.length && !doTimer) {
-          console.log("2、预加载.非首页的其他图片.完成");
+          // console.log("2、预加载.非首页的其他图片.完成");
           clearTimeout(this.timerPreloadOtherPages);
           clearInterval(this.intervalId);
           this.afterPreloadOtherPages();
@@ -114,7 +114,7 @@ export default {
 
     // 非首页的其他图片预加载后
     afterPreloadOtherPages() {
-      console.log("3、开始h5");
+      // console.log("3、开始h5");
       if (this.$bus.showPage === "loading") {
         setTimeout(() => {
           this.$bus.showPage = "start";
