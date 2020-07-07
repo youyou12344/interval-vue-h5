@@ -3,8 +3,7 @@
   "version": "1.1.0",
   "description": "vue-cli plugin to create itv-h5",
   "main": "generator.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/youyou12344/vue-h5.git"
@@ -15,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/youyou12344/vue-h5/issues"
   },
-  "homepage": "https://github.com/youyou12344/vue-h5#readme"
+  "homepage": "https://github.com/youyou12344/vue-h5#readme",
+  "dependencies": {
+    "inquirer": "^7.3.0"
+  }
 }

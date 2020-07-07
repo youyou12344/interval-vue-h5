@@ -7,6 +7,10 @@ import utils from "./utils";
 
 import "./style/a.less";
 
+// 按需加载 vant 组件
+// import { Loading } from "vant";
+// Vue.use(Loading);
+
 // import VConsole from "vconsole";
 // let vConsole = new VConsole();
 
