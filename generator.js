@@ -57,9 +57,14 @@ module.exports = (api, options, rootOptions) => {
     const path1 = api.resolve("./README.md");
     const path2 = api.resolve("./src/components/HelloWorld.vue");
     const path3 = api.resolve("./babel.config.js");
+    const path4 = api.resolve("./src/assets/logo.png");
 
     // 删除 HelloWorld.vue
     fs.unlink(path2, (err) => {
+      if (err) throw err;
+    })
+    // 删除 assets/logo.png
+    fs.unlink(path4, (err) => {
       if (err) throw err;
     })
 

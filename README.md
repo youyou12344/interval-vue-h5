@@ -46,4 +46,5 @@ template 模版文件
 - [x] HelloWorld.vue 文件无法删除
 - [x] README.md 文佳无法覆盖
 - [x] vant 按需安装
-- [ ] 请输入项目的html标题，无法取到 vue-create 设置的名字
+- [ ] 请输入项目的html标题，无法取到 vue-create 设置的名字 【20200707】
+- [ ] 没有生成 asset/images 文件夹 【20200707】
