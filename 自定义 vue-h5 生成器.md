@@ -8,7 +8,7 @@ vue-cli 可以用来快速创建一个 vue 项目，同时它还提供了 2 种�
 
 ## 使用方式
 ``` shell
-vue create --preset youyou12344/vue-h5 项目名称
+vue create --preset youyou12344/itv-vue-h5 项目名称
 ```
 
 
