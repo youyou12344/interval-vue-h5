@@ -1,3 +1,4 @@
+// 动画样式
 /* 可以参考：
   - [Animista](https://animista.net/play)
   - [Animate CSS](https://animate.style/)
@@ -6,13 +7,16 @@
   - [更多的动画库_掘金](https://juejin.im/post/5e24f095e51d45023129baa8#heading-17)
  */
 
-// 动画：渐入
-@keyframes fadeIn {
-  from {
+@keyframes fade-in {
+  0% {
     opacity: 0;
   }
-
-  to {
+  100% {
     opacity: 1;
   }
 }
+.fade-in {
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
+
+

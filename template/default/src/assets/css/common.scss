@@ -1,0 +1,26 @@
+// 全局使用的样式
+.pa-c {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.f-c-c {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.f-fs-c {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.f-fd-c {
+  flex-direction: column;
+}
+
+.mb40 {
+  margin-bottom: 40px;
+}

@@ -1,131 +1,111 @@
 <template>
   <div id="app">
-    <%_ if (options.mode === 0) { _%>
-    <!-- 音乐按钮 -->
-    <itv-bgm />
-    <%_ } _%>
-
-    <!-- 显示的内容 -->
-    <router-view />
-
-    <!-- 提示框 -->
-    <itv-toast
-      :show.sync="$bus.toast.show"
-      :content="$bus.toast.content"
-    ></itv-toast>
+    <BgMusic />
+    <PreloadProgress class="mb40" @onFinish="onFinishPreload" />
+    <div>
+      <button class="btn" @click="onMusicButton(1)">微信自动播放</button>
+      <button class="btn" @click="onMusicButton(2)">点击播放音乐</button>
+      <button class="btn" @click="onMusicButton(3)">点击暂停音乐</button>
+      <button class="btn" @click="onMusicButton(4)">
+        {{ $store.state.bgm.isShowBtnMusic ? "隐藏" : "显示" }}按钮
+      </button>
+    </div>
+    <transition :name="transitionName">
+      <router-view class="page" v-show="isShowView" />
+    </transition>
   </div>
 </template>
 
 <script>
-import ItvToast from "./components/Toast";
-<%_ if (options.mode === 0) { _%>
-import ItvBgm from "./components/Bgm";
-<%_ } _%>
+import BgMusic from "@/components/BgMusic.vue"
+import PreloadProgress from "@/components/PreloadProgress.vue"
 
 export default {
-  name: "app",
   mixins: [],
-  components: { 
-    <%_ if (options.mode === 0) { _%>
-    ItvBgm,
-    <%_ } _%>
-    ItvToast
-  },
+  props: {},
   data() {
-    return {};
+    return {
+      transitionName: "fade",
+      isShowView: false, // 是否显示路由内容
+    }
   },
-
+  components: { BgMusic, PreloadProgress },
   computed: {},
-
-  created() {
-    // this.$utils.initSizeClass()
+  watch: {
+    // // 路由切换动画
+    // $route(to, from) {
+    //   const toDepth = to.path.split("/").length
+    //   const fromDepth = from.path.split("/").length
+    //   this.transitionName = toDepth < fromDepth ? "slide-right" : "slide-left"
+    // },
   },
-
+  created() {},
   mounted() {
-    this.$nextTick(async () => {
-      try {
-        this.initPage();
-        // 设置微信分享的卡片信息
-        await this.$utils.initToken({
-          title: "wx分享的标题",
-          desc: "wx分享的描述",
-          img:
-            "https://static.interval.im/platinum_inventory/R8kYSCmEzpBBz5rJ.jpeg",
-          link: "http://wxc8f356adb367c7b6.wx.interval.im/cmbc/"
-        }, () => {
-          <%_ if (options.mode === 0) { _%>
-          this.$bus.palyBgmMusic()
-          <%_ } _%>
-          // 微信环境的回调
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    });
+    // 微信权限校验配置
+    this.$store.dispatch("doWxConfig", {
+      doAfterWxConfig: ({ isWx }) => {
+        if (isWx) {
+          // this.setPageWxShare() // 设置页面微信分享
+        }
+      },
+    })
   },
   methods: {
-    // 初始化页面
-    initPage() {
-      <%_ if (options.mode === 0) { _%>
-      this.$bus.audio_bgm = new Audio(require("./assets/bgm.mp3"));
-      <%_ } _%>
-    }
-  }
-};
+    onMusicButton(type) {
+      if (type === 1) {
+        return this.$store.dispatch("palyBgm")
+      } else if (type === 2) {
+        return this.$store.dispatch("swichBgm", "play")
+      } else if (type === 3) {
+        return this.$store.dispatch("swichBgm", "stop")
+      } else if (type === 4) {
+        return this.$store.commit(
+          "setIsShowBtnMusic",
+          !this.$store.state.bgm.isShowBtnMusic
+        )
+      }
+    },
+    onFinishPreload() {
+      this.isShowView = true
+    },
+  },
+}
 </script>
 
-<style lang="less">
-img[src=""],
-img:not([src]) {
+<style lang="scss">
+.btn {
+  width: 60%;
+  display: block;
+  margin: 10px auto;
+}
+
+/* 路由切换动画 */
+.page {
+  position: absolute;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  transition: all 0.75s cubic-bezier(0.55, 0, 0.1, 1);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to,
+.fade-leave-active {
   opacity: 0;
 }
-<%_ if (options.mode === 0) { _%>
-
-.btn-music {
-  width: 61px;
-  position: fixed;
-  top: 20px;
-  right: 24px;
-  z-index: 1;
-  img {
-    width: 100%;
-    height: 100%;
-  }
+/* .slide-left-enter,
+.slide-right-leave-active {
+  opacity: 0;
+  -webkit-transform: translate(30px, 0);
+  transform: translate(30px, 0);
 }
-<%_ } _%>
-
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  // overflow: hidden;
-}
-
-html,
-body {
-  width: 100vw;
-  height: 100vh;
-  // overflow: hidden;
-  #app {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.page__wrap {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  max-height: 100vh;
-  overflow: hidden;
-  .page__cnt {
-    width: 100%;
-    height: 100vh;
-    max-height: 100vh;
-    overflow-y: auto;
-    padding: 0;
-    box-sizing: border-box;
-  }
-}
-
+.slide-left-leave-active,
+.slide-right-enter {
+  opacity: 0;
+  -webkit-transform: translate(-30px, 0);
+  transform: translate(-30px, 0);
+} */
 </style>

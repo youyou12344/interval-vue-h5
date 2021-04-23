@@ -1,7 +1,7 @@
 {
-  "name": "vue-cli-plugin-itv-html",
-  "version": "1.1.0",
-  "description": "vue-cli plugin to create itv-h5",
+  "name": "vue-cli-plugin-itv-vue-h5",
+  "version": "2.0.0",
+  "description": "interval 快速创建h5项目",
   "main": "generator.js",
   "scripts": {},
   "repository": {
