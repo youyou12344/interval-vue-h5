@@ -10,7 +10,7 @@
 
 
 ---
-## itv-vue-h5 实现/封装了什么?
+## interval-vue-h5 实现/封装了什么?
 
 ### 封装了h5常用的功能
 1. 微信分享 *(src/store/wx.js)*
@@ -53,7 +53,12 @@
 
 
 ---
-## 怎么使用 itv-vue-h5 ？
+## 怎么使用 interval-vue-h5 ？
+
+创建项目
+``` shell
+vue create --preset youyou12344/interval-vue-h5 项目名称
+```
 
 查看 ./docs 下的相关说明文档，查看封装的内容如何具体使用。
 

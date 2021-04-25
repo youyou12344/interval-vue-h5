@@ -8,7 +8,7 @@ vue-cli 可以用来快速创建一个 vue 项目，同时它还提供了 2 种�
 
 ## 使用方式
 ``` shell
-vue create --preset youyou12344/itv-vue-h5 项目名称
+vue create --preset youyou12344/interval-vue-h5 项目名称
 ```
 
 
@@ -49,12 +49,12 @@ g files
 选择 y 保存模版，vue-cli 会让给这个模版取一个名字。
 ``` shell
 ? Save this as a preset for future projects? Yes
-? Save preset as: itv-vue-h5
+? Save preset as: interval-vue-h5
 ```
 下次，执行创建的时候就会看到模版（相关配置项写在括号中），可以直接选择它创建项目。
 ``` shell
 ? Please pick a preset: (Use arrow keys)
-❯ itv-vue-h5 (dart-sass, babel, router, vuex, eslint) 
+❯ interval-vue-h5 (dart-sass, babel, router, vuex, eslint) 
   default (babel, eslint)
   Manually select features
 ```
@@ -73,7 +73,7 @@ command shift . # 查看隐藏文件
   "useTaobaoRegistry": false,
   "packageManager": "npm",
   "presets": {
-    "itv-vue-h5": {
+    "interval-vue-h5": {
       "useConfigFiles": true,
       // 依赖的包
       "plugins": {
@@ -102,7 +102,7 @@ command shift . # 查看隐藏文件
 可以修改 plugins ，自定义添加更多包。
 ``` shell
 ? Please pick a preset: (Use arrow keys)
-❯ itv-vue-h5 (dart-sass, babel, router, vuex, eslint, postcss-px-to-viewport) # 可以看到这里新增了 postcss-px-to-viewport
+❯ interval-vue-h5 (dart-sass, babel, router, vuex, eslint, postcss-px-to-viewport) # 可以看到这里新增了 postcss-px-to-viewport
   default (babel, eslint)
   Manually select features
 ```
@@ -499,7 +499,7 @@ module.exports = (api, options, rootOptions) => {
 ### 4、测试使用本地preset
 在该项目的目录下，运行如下命令：
 ``` shell
-vue create --preset ./itv-vue-h5 test1
+vue create --preset ./interval-vue-h5 test1
 ```
 
 远程包的使用
@@ -508,7 +508,7 @@ vue create --preset youyou12344/vue-h5 test2
 ```
 
 ``` shell
-➜  【勿删模版】 vue add itv-vue-h5
+➜  【勿删模版】 vue add interval-vue-h5
 
 📦  Installing vue-cli-plugin-itv-vue-h5...
 
