@@ -63,7 +63,7 @@ const moduleWx = {
     getWxShareLink({ state }, link) {
       const _link = link || window.location.href
       // eslint-disable-next-line prettier/prettier
-      return `${process.env.VUE_APP_FD_SERVER}redirect.html?shareRedirect=${encodeURIComponent(_link)}`
+      return `${process.env.VUE_APP_FD_URL}redirect.html?shareRedirect=${encodeURIComponent(_link)}`
     },
 
     // 设置当前页面微信分享信息（可以传入自定义的 params 与默认的 DEFAULT_SHARE_PARAMS 合并生成微信分享参数）
