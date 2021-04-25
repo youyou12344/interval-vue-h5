@@ -1,7 +1,9 @@
-// 背景音乐可能在不同的vue文件中都要做修改，所以放在在全局会比较方便
+/* 背景音乐封装 */
 
-const bgmAudio = new Audio("https://sourl.co/CdRNkP") // 背景音乐（根据项目修改）
+// 【根据项目修改配置】 背景音乐
+const bgmAudio = new Audio("https://sourl.co/CdRNkP")
 
+// 【下面内容是固定配置，无需修改】
 const moduleBgm = {
   state: () => ({
     isPlayingBgm: false, // 正在播放背景音乐
@@ -23,7 +25,7 @@ const moduleBgm = {
     palyBgm({ state, commit }) {
       if (!bgmAudio) return
       bgmAudio.play()
-      bgmAudio.volume = 1
+      bgmAudio.volume = 1 // 注意 ios 无法修改
       bgmAudio.loop = true
       commit("setIsPlayingBgm", true)
     },

@@ -1,28 +1,34 @@
-// 微信网页开发文档： https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#49
-// ！注意 wx.config 本地测试环境无法生效，会报错 signature invalid，需要发不到线上环境才能测试哦。
-// ！注意如果用到 wx 的 JSApi 接口（除了微信分享），需要更新 jsApiList 数组，不然微信的 api 功能无法生效哦。
+/* 微信相关封装 */
 import Api from "@/assets/js/api"
+import { Toast } from "vant"
 
-// h5的默认分享配置（路由是hash模式的，所以只需要配置一次）
+// 【根据项目修改配置】 h5默认微信分享参数
 const DEFAULT_SHARE_PARAMS = {
   title: "分享标题", // 分享标题
-  link: `${process.env.VUE_APP_FD_SERVER}${process.env.VUE_APP_FD_FILENAME}/#/`, // 分享点击跳转链接
+  link: process.env.VUE_APP_FD_URL, // 分享点击跳转链接(默认是项目的根路由)
   imgUrl: "https://static.interval.im/interval/FTh2QzE7mF5ke2Xy.jpeg", // 分享图片
   desc: "分享描述", // 分享描述
 }
 
+// 【根据项目修改配置】 项目中用到微信API（用到别的api，记得添加，比如扫一扫）
+const WX_JS_API = [
+  "updateAppMessageShareData", // 分享好友
+  "updateTimelineShareData", // 分享朋友圈
+]
+
+// 【下面内容是固定配置，无需修改】
 const moduleWx = {
   state: () => ({
     isWx: false, // 是微信浏览器
-    isWxReady: false, // wx.config已完成（不确保配置成功，不成功微信的api无法掉用），wx.ready已执行
+    isWxConfig: false, // wx.config已执行（不确保配置成功，不成功微信的api无法掉用
     // 默认的分享信息
   }),
   mutations: {
     setIsWx(state, v) {
       state.isWx = v
     },
-    setIsWxReady(state, v) {
-      state.isWxReady = v
+    setIsWxConfig(state, v) {
+      state.isWxConfig = v
     },
   },
   actions: {
@@ -39,17 +45,32 @@ const moduleWx = {
       }
     },
 
-    // 获取微信分享点击跳转链接（跳转到中间页）
-    // eslint-disable-next-line no-unused-vars
-    getWxShareLink({ state }, link) {
-      // eslint-disable-next-line prettier/prettier
-      return `${process.env.VUE_APP_FD_SERVER}redirect.html?shareRedirect=${encodeURIComponent(link)}`
+    // 判断是否可以调用微信API
+    getCanWxApi({ state }) {
+      if (!state.isWx) {
+        Toast("请在微信浏览器中打开")
+        return false
+      }
+      if (!state.isWxConfig) {
+        Toast("微信配置中")
+        return false
+      }
+      return true
     },
 
-    //设置页面微信分享（可以传入自定义的 params 与默认的 DEFAULT_SHARE_PARAMS 合并生成微信分享参数）
-    setPageWxShare({ state }, params = {}) {
+    // 获取当前页面/指定路径的`中间页`分享链接（hash模式的路由，为了兼容ios，分享需要跳转到中间页，然后再重定向到真正分享的页面。）
+    // eslint-disable-next-line no-unused-vars
+    getWxShareLink({ state }, link) {
+      const _link = link || window.location.href
+      // eslint-disable-next-line prettier/prettier
+      return `${process.env.VUE_APP_FD_SERVER}redirect.html?shareRedirect=${encodeURIComponent(_link)}`
+    },
+
+    // 设置当前页面微信分享信息（可以传入自定义的 params 与默认的 DEFAULT_SHARE_PARAMS 合并生成微信分享参数）
+    async setPageWxShare({ dispatch }, params = {}) {
       try {
-        if (!state.isWxReady) return console.error("isWxReady 0")
+        const canWxApi = await dispatch("getCanWxApi")
+        if (!canWxApi) return
         const wxShareParams = { ...DEFAULT_SHARE_PARAMS, ...params }
         const { title, link, imgUrl, desc } = wxShareParams
         wx.updateTimelineShareData({ title, link, imgUrl }) // 分享朋友圈
@@ -59,22 +80,15 @@ const moduleWx = {
       }
     },
 
-    // 微信权限配置（请求获取微信公众号相关信息，并带着信息向微信查询是否有权限调用微信api）
-    async doWxConfig({ state, dispatch, commit }, { doAfterWxConfig } = {}) {
-      if (state.isWxReady) return // 已经配置过了
+    // 微信权限配置
+    async doWxConfig({ state, dispatch, commit }) {
+      if (state.isWxConfig) return // 已经配置过了
       try {
         const device = await dispatch("getDevice")
         const isWx = device.isWx
         commit("setIsWx", isWx)
-        const doCb = () => {
-          console.dev("执行回调函数，并返回 isWx 告知是否是微信浏览器")
-          typeof doAfterWxConfig === "function"
-            ? doAfterWxConfig({ isWx })
-            : null
-        }
         if (!isWx) {
-          console.dev("不是微信浏览器（立即执行回调函数）")
-          return doCb()
+          return console.dev("不是微信浏览器")
         }
         // 是微信浏览器，注入权限验证配置，然后执行回调函数（如：自动播放媒体文件、设置微信分享）
         // const signLink = location.href.split("#")[0] // 项目路径
@@ -89,16 +103,11 @@ const moduleWx = {
           timestamp: data.timestamp, // 必填，生成签名的时间戳
           nonceStr: data.noncestr, // 必填，生成签名的随机串
           signature: data.signature, // 必填，签名
-          jsApiList: [
-            "scanQRCode", // 微信扫一扫
-            "updateAppMessageShareData", // 分享好友
-            "updateTimelineShareData", // 分享朋友圈
-          ], // 必填，需要使用的JS接口列表（需要用到别的api，记得添加）
+          jsApiList: WX_JS_API, // 必填，需要使用的JS接口列表
         })
         wx.ready(() => {
           // 注意config信息验证失败也会执行ready（校验失败还是可以自动播放音乐）
-          doCb()
-          commit("setIsWxReady", true)
+          commit("setIsWxConfig", true)
         })
         wx.error(function (res) {
           // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。

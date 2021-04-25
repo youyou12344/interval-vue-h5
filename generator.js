@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 const path = require('path');
 
@@ -68,5 +67,61 @@ module.exports = (api, options, rootOptions) => {
         })
       })
     })();
+
+    // 复制文件夹
+    (function doCopyDir() {
+      const needCopyDir = [
+        {
+          targetDir: api.resolve("./docs"),
+          useDir: path.resolve(__dirname, './template/custom/docs')
+        },
+      ]
+
+      // 拷贝方法
+      function _copy(err, src, dist) {
+        if (err) return callback(err);
+        fs.readdir(src, function (err, paths) {
+          if (err) return callback(err);
+          paths.forEach(function (path) {
+            var _src = src + '/' + path;
+            var _dist = dist + '/' + path;
+            // 判断文件是否存在
+            fs.stat(_src, function (err, stat) {
+              if (err) return callback(err);
+              // 判断是文件还是目录
+              if (stat.isFile()) {
+                fs.writeFileSync(_dist, fs.readFileSync(_src));
+              } else if (stat.isDirectory()) {
+                // 当是目录是，递归复制
+                copyDir(_src, _dist, callback)
+              }
+            })
+          })
+        })
+      }
+
+      needCopyDir.forEach(dir => {
+        // 判断将要写入的目录是存在
+        fs.access(dir.targetDir, function (err) {
+          err && fs.mkdirSync(dir.targetDir);
+          _copy(null, dir.useDir, dir.targetDir);
+        })
+      })
+    }());
+
+    // 创建空的文件夹
+    (function doCreateEmptyDir() {
+      const neesEmptyDir = [
+        api.resolve("./src/assets/images/frame"),
+        api.resolve("./src/assets/images/noPreload"),
+        api.resolve("./src/assets/images/preload2"),
+      ]
+      neesEmptyDir.forEach(dir => {
+        // 判断将要写入的目录是存在
+        fs.access(dir, function (err) {
+          err && fs.mkdirSync(dir);
+        })
+      })
+    }());
   })
 }

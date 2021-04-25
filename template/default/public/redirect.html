@@ -7,6 +7,7 @@
     data[p[0]] = p[1]
   })
   if (data.shareRedirect) {
-    window.location.href = decodeURIComponent(data.shareRedirect)
+    // window.location.href = decodeURIComponent(data.shareRedirect)
+    window.location.replace(decodeURIComponent(data.shareRedirect))
   }
 </script>

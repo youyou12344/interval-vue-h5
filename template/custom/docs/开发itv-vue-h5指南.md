@@ -225,7 +225,7 @@ preset.json 可以直接复制 `~/.vuerc` 文件中的 presets 属性值 *（不
 
 插件的 Generator 部分通常在你想要为项目扩展包依赖，创建新的文件或者编辑已经存在的文件时需要。
 
-*原理：使用 [EJS](https://github.com/mde/ejs) 渲染添加 template 文件夹中的模版文件。*
+*原理：使用 [EJS](https://github.com/mde/ejs) 渲染添加 template 文件夹中的模版文件。（custom中的文件不会用ejs渲染）*
 
 *项目的创建是基于 vue-cli 默认创建项目结构，即先根据 preset 创建默认项目，在根据 generator.js 修改相关的目录结构。(可以在 vue-create 时，打开对应的文件夹查项目内容)*
 

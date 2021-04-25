@@ -1,15 +1,16 @@
 <template>
   <div id="app">
     <BgMusic />
-    <PreloadProgress class="mb40" @onFinish="onFinishPreload" />
     <div>
       <button class="btn" @click="onMusicButton(1)">微信自动播放</button>
       <button class="btn" @click="onMusicButton(2)">点击播放音乐</button>
       <button class="btn" @click="onMusicButton(3)">点击暂停音乐</button>
-      <button class="btn" @click="onMusicButton(4)">
-        {{ $store.state.bgm.isShowBtnMusic ? "隐藏" : "显示" }}按钮
-      </button>
+      <button class="btn" @click="onMusicButton(4)">显示音乐按钮</button>
+      <button class="btn" @click="onMusicButton(5)">隐藏音乐按钮</button>
     </div>
+
+    <PreloadProgress class="mb40" @onFinish="onFinishPreload" v-show="!isShowView" />
+
     <transition :name="transitionName">
       <router-view class="page" v-show="isShowView" />
     </transition>
@@ -41,13 +42,10 @@ export default {
   },
   created() {},
   mounted() {
-    // 微信权限校验配置
-    this.$store.dispatch("doWxConfig", {
-      doAfterWxConfig: ({ isWx }) => {
-        if (isWx) {
-          // this.setPageWxShare() // 设置页面微信分享
-        }
-      },
+    this.$store.dispatch("doWxConfig") // 微信权限校验配置
+    wx.ready(() => {
+      // this.$store.dispatch("setPageWxShare") // 设置页面微信分享
+      // this.$store.dispatch("palyBgm") // 微信自动播放背景音乐
     })
   },
   methods: {
@@ -59,10 +57,9 @@ export default {
       } else if (type === 3) {
         return this.$store.dispatch("swichBgm", "stop")
       } else if (type === 4) {
-        return this.$store.commit(
-          "setIsShowBtnMusic",
-          !this.$store.state.bgm.isShowBtnMusic
-        )
+        return this.$store.commit("setIsShowBtnMusic", true)
+      } else if (type === 5) {
+        return this.$store.commit("setIsShowBtnMusic", false)
       }
     },
     onFinishPreload() {
