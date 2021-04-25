@@ -30,8 +30,22 @@
 3. css 样式 *(src/assets/css/index.scss)*
 
 
+想要保存时，vscode自动根据 eslint 格式化，要添加编辑器设置 setting.json
+``` JS
+{
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+      "source.organizeImports": false
+    }, // 每次保存的时候将代码按eslint格式进行修复
+}
+```
 
 
+
+
+### 须知
+1. 项目的路由模式： `hash` (不用麻烦后端配置不同的路径)
+2. css 扩展语言： `scss` (变量、函数比less好用)
 
 
 
