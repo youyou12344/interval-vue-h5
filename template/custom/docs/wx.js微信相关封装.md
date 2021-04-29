@@ -85,7 +85,7 @@ if (!canWxApi) return
 ``` JS
 this.$store.dispatch("setPageWxShare") // 分享信息取默认值
 
-wx.ready(async () => {
+wx.ready(async () => { // 建议在 page 中，外部包裹一层 wx.ready 使用
   const link = await this.$store.dispatch("getWxShareLink")
   this.$store.dispatch("setPageWxShare", {
     title: "该页面 分享标题",

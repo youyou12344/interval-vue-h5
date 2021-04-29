@@ -66,7 +66,7 @@ const moduleWx = {
       return `${process.env.VUE_APP_FD_URL}redirect.html?shareRedirect=${encodeURIComponent(_link)}`
     },
 
-    // 设置当前页面微信分享信息（可以传入自定义的 params 与默认的 DEFAULT_SHARE_PARAMS 合并生成微信分享参数）
+    // 设置当前页面微信分享信息（建议在 page 中，外部包裹一层 wx.ready 使用）（可以传入自定义的 params 与默认的 DEFAULT_SHARE_PARAMS 合并生成微信分享参数）
     async setPageWxShare({ dispatch }, params = {}) {
       try {
         const canWxApi = await dispatch("getCanWxApi")
