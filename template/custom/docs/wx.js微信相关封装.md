@@ -8,9 +8,20 @@
 *注意：已默认在index.html中注入了微信JS-SDK脚本。*
 
 
+
 wx.js 封装了什么？
 - 封装了调用微信api的相关逻辑，如调用前需要 `wx.config` 。
 - 封装了常用的`微信分享`功能。
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -89,7 +100,7 @@ wx.ready(async () => { // 建议在 page 中，外部包裹一层 wx.ready 使�
   const link = await this.$store.dispatch("getWxShareLink")
   this.$store.dispatch("setPageWxShare", {
     title: "该页面 分享标题",
-    link: "该页面 分享点击跳转链接",
+    link: "该页面 分享点击跳转链接(！该链接域名或路径必须与当前页面对应的公众号JS安全域名一致)",
     imgUrl: "该页面 分享图片",
     desc: "该页面 分享描述",
   })
@@ -102,7 +113,7 @@ wx.ready(async () => { // 建议在 page 中，外部包裹一层 wx.ready 使�
 const link = await this.$store.dispatch("getWxShareLink") // 分享路径默认去当前页面
 
 const link = await this.$store.dispatch("getWxShareLink", {
-  link: "指定的分享路径"
+  link: "指定的分享路径" // 可以绕过“微信分享链接域名或路径必须与当前页面对应的公众号JS安全域名一致”这个限制
 })
 ```
 
@@ -143,3 +154,45 @@ wx.scanQRCode({
   },
 })
 ```
+
+
+---
+## 三、问题探索
+### 1、多 wx.ready 执行顺序
+
+#### 0、顺序结果
+``` shell
+🚀 开发：App created
+🚀 开发：App mounted
+# 在 App.vue 中调用 doWxConfig ， 还在其后继续添加 wx.ready 。（created/mounted 都可以）
+# 目标：保证 doWxConfig 最早调用，早于其他 vue 文件中添加 wx.ready ，从而提前更新好 isWxConfig 的值。
+🚀 开发：MpPtManage created 
+🚀 开发：MpPtManage mounted 
+🚀 开发：wx.ready in App created
+🚀 开发：wx.ready in App mounted
+# 在 MpPtManage.vue 中可以继续添加 wx.ready 。 （created/mounted 都可以）
+# 目标： 执行 MpPtManage.vue 中的 wx.ready 前， doWxConfig 中的 wx.ready 已执行， isWxConfig 值已更新。
+🚀 开发：wx.ready in MpPtManage created
+🚀 开发：wx.ready in MpPtManage mounted 
+
+# 实现目标的方法：
+# 1、确保 doWxConfig 的调用早于其他 vue 中添加的 wx.ready 执行。
+# 2、确保 doWxConfig 中的 wx.ready 前无 await 异步函数即可。
+```
+
+#### 1、App.vue 的 wx.ready 优先级最高
+探索1： wx.ready 在主入口 App.vue 和子路由 MpPtManage.vue 中的执行顺序会因为声明。
+结论1： 直接在 App.vue 中同步的 wx.ready，会早于 MpPtManage.vue 中同步的 wx.ready。
+发现1： App.vue 的 created 和 mounted 都早于 MpPtManage.vue 的 created 和 mounted 。
+*这里需要直到 MpPtManage.vue 不是作为子组件使用，而是作为子路由。如果作为子组件 mounted 会早于父容器的 mounted 执行。*
+
+#### 2、避免 wx.ready 被异步阻塞
+探索2： 是不是因为 doWxConfig 中的 wx.ready 需要等待之前的异步操作完毕后才执行？
+结论2： 是的，所以 doWxConfig 中 wx.ready 前不能有 await 异步事件。
+
+
+#### 3、wx.ready 触发逻辑
+提示1： wx.ready 无论是否权限配置成功都会执行。 所以，即使校验失败还是可以自动播放音乐。
+提示2： 如果权限配置错误 wx.error 会早于 wx.ready 执行。
+提示3： doWxConfig 尽量在 App.vue 中调用，从而保证 doWxConfig 中的 wx.ready 早于其他 vue 中添加 wx.ready。
+
