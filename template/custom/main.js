@@ -31,7 +31,7 @@ console.dev = (v, { where, isImportant, otherValue } = {}) => {
   const showConsoleDev = process.env.NODE_ENV === "development" || isDeveloper // 能显示的打印结果
   if (showConsoleDev) {
     const bgColor = isImportant === true ? "#ff000050" : "#00ffff20"
-    const otherV = otherValue === undefined ? "" : otherV
+    const otherV = otherValue === undefined ? "" : otherValue
     console.log("%c 🚀 开发：%s", `background: ${bgColor}`, v, otherV)
     where && console.log("%c    --- 打印来自： %s", "color: #ccc", where)
   }
