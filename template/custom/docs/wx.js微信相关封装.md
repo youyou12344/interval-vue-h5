@@ -28,7 +28,6 @@ wx.js 封装了什么？
 
 
 
-
 ---
 ## 一、 doWxConfig 微信权限配置
 
@@ -96,7 +95,7 @@ if (!canWxApi) return
 ``` JS
 this.$store.dispatch("setPageWxShare") // 分享信息取默认值
 
-wx.ready(async () => { // 建议在 page 中，外部包裹一层 wx.ready 使用
+this.$store.dispatch("doWxReady", async () => { // 建议在 page 中，外部包裹一层 wx.ready 使用
   const link = await this.$store.dispatch("getWxShareLink")
   this.$store.dispatch("setPageWxShare", {
     title: "该页面 分享标题",

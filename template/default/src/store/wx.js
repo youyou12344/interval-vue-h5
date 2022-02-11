@@ -96,8 +96,6 @@ const moduleWx = {
           const isWx = device.isWx
           commit("setIsWx", isWx)
         }
-        const isWx = device.isWx
-        commit("setIsWx", isWx)
         if (!state.isWx) {
           commit("setIsDoingWxConfig", false) // wx.config 执行完毕
           return console.dev("不是微信浏览器，不继续执行 wx.config")
